@@ -1,0 +1,15 @@
+{
+	"name": "adfdnyan",
+	"properties": {
+		"trustModeClaimForMi": {
+			"value": "Disabled",
+			"editable": true
+		}
+	},
+	"location": "centralindia",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "a2353b1d-ffc6-40ed-b728-ec1b4838a9f7",
+		"tenantId": "a49734d8-06ff-4222-9f39-5b223d309c49"
+	}
+}
