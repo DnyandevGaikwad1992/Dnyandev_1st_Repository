@@ -1,0 +1,92 @@
+{
+	"name": "DF_Flatten_Events",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DS_Events_JSON",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "Parquet2",
+						"type": "DatasetReference"
+					},
+					"name": "sink1",
+					"rejectedDataLinkedService": {
+						"referenceName": "AzureDataLakeStorage1",
+						"type": "LinkedServiceReference"
+					}
+				}
+			],
+			"transformations": [
+				{
+					"name": "flatten1"
+				},
+				{
+					"name": "derivedColumn1"
+				},
+				{
+					"name": "select1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          event_id as string,",
+				"          event_time as string,",
+				"          store as (store_id as string, city as string),",
+				"          customer as (customer_id as string, loyalty as string),",
+				"          items as (product_id as string, qty as integer, unit_price as integer)[]",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     documentForm: 'arrayOfDocuments') ~> source1",
+				"source1 foldDown(unroll(items),",
+				"     mapColumn(",
+				"          event_id,",
+				"          event_time,",
+				"          store,",
+				"          customer,",
+				"          items",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> flatten1",
+				"flatten1 derive(store_id = store.store_id,",
+				"          city = store.city,",
+				"          customer_id = customer.customer_id,",
+				"          loyalty = customer.loyalty,",
+				"          product_id = items.product_id,",
+				"          qty = toInteger(items.qty),",
+				"          unit_price = toDecimal(items.unit_price,10,2)) ~> derivedColumn1",
+				"derivedColumn1 select(mapColumn(",
+				"          event_id,",
+				"          event_time,",
+				"          store_id,",
+				"          city,",
+				"          customer_id,",
+				"          loyalty,",
+				"          product_id,",
+				"          qty,",
+				"          unit_price",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"select1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'parquet',",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sink1"
+			]
+		}
+	}
+}
