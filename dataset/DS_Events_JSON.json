@@ -1,0 +1,68 @@
+{
+	"name": "DS_Events_JSON",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "sales_events.json",
+				"fileSystem": "bronze-data"
+			}
+		},
+		"schema": {
+			"type": "object",
+			"properties": {
+				"event_id": {
+					"type": "string"
+				},
+				"event_time": {
+					"type": "string"
+				},
+				"store": {
+					"type": "object",
+					"properties": {
+						"store_id": {
+							"type": "string"
+						},
+						"city": {
+							"type": "string"
+						}
+					}
+				},
+				"customer": {
+					"type": "object",
+					"properties": {
+						"customer_id": {
+							"type": "string"
+						},
+						"loyalty": {
+							"type": "string"
+						}
+					}
+				},
+				"items": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"properties": {
+							"product_id": {
+								"type": "string"
+							},
+							"qty": {
+								"type": "integer"
+							},
+							"unit_price": {
+								"type": "integer"
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
