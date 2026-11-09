@@ -1,0 +1,15 @@
+{
+	"name": "dnyan2026",
+	"properties": {
+		"trustModeClaimForMi": {
+			"value": "Disabled",
+			"editable": true
+		}
+	},
+	"location": "centralindia",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "bd49f96e-4ce6-4ab7-b848-96d873a2ad04",
+		"tenantId": "59d93372-5d8a-454d-b4a7-2e40dea39bea"
+	}
+}
